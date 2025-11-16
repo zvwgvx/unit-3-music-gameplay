@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap');
+
+:root {
+  --warm-bg: #FFF8E1;
+  --warm-text: #5D4037;
+  --accent-color-1: #FF7043;
+  --accent-color-2: #EF9A9A; /* NEW: Soft Coral Pink */
+  --card-bg: rgba(255, 255, 255, 0.7);
+}
+
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  background-color: var(--warm-bg);
+  color: var(--warm-text);
+  
+  position: relative;
+  overflow: hidden;
+
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* A single pseudo-element to act as the rotating spinner */
+body::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  
+  width: 150vmax;
+  height: 150vmax;
+  
+  background-image: 
+    radial-gradient(circle, var(--accent-color-1), transparent),
+    radial-gradient(circle, var(--accent-color-2), transparent);
+  
+  background-position: 
+    calc(50% - 40vmax) 50%,
+    calc(50% + 40vmax) 50%;
+
+  background-size: 
+    75vmax 75vmax,
+    55vmax 55vmax;
+  
+  background-repeat: no-repeat;
+
+  opacity: 0.6;
+  filter: blur(60px);
+
+  animation: rotate 40s linear infinite;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
