@@ -1,139 +1,139 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import './Game.css';
 
 // --- BẠN SẼ THAY ĐỔI NỘI DUNG Ở ĐÂY ---
 const crosswordData = {
-  grid: [
-    [null, { number: 1, answer: 'F' }, { answer: 'A' }, { answer: 'N' }, null],
-    [null, { answer: 'L' }, null, { number: 2, answer: 'O' }, null],
-    [{ number: 3, answer: 'S' }, { answer: 'O' }, { answer: 'L' }, { answer: 'O' }, null],
-    [null, { answer: 'W' }, null, { answer: 'P' }, null],
-    [null, { number: 4, answer: 'E' }, { answer: 'R' }, { answer: 'A' }, null],
-  ],
-  clues: {
-    across: [
-      { number: 3, text: 'A performance by a single musician' },
-      { number: 4, text: 'A dramatic work in one or more acts, set to music' },
-    ],
-    down: [
-      { number: 1, text: 'A devoted admirer of a singer or band' },
-      { number: 2, text: 'A musical composition' },
-    ],
-  },
+  gridSize: [7, 9], // 7 hàng, 9 cột
+  words: [
+    { clue: 'A performance by a single musician', answer: 'SOLO', start: [2, 0], direction: 'across' },
+    { clue: 'A dramatic work set to music', answer: 'OPERA', start: [4, 2], direction: 'across' },
+    { clue: 'A devoted admirer of a band', answer: 'FAN', start: [0, 3], direction: 'down' },
+    { clue: 'A musical composition', answer: 'SONG', start: [2, 1], direction: 'down' },
+    { clue: 'The speed at which a passage of music is played', answer: 'TEMPO', start: [2, 5], direction: 'down' },
+  ]
 };
 // -----------------------------------------
 
-function Game3_Crossword() {
-  const [gridState, setGridState] = useState([]);
-  const [checkState, setCheckState] = useState([]); // 'correct', 'incorrect', or ''
-  const inputRefs = useRef([]);
+const buildGrid = (gridSize, words) => {
+  const grid = Array(gridSize[0]).fill(null).map(() => Array(gridSize[1]).fill(null));
+  const wordMap = {};
 
-  useEffect(() => {
-    const initialGrid = crosswordData.grid.map(row =>
-      row.map(cell => (cell ? '' : null))
-    );
-    setGridState(initialGrid);
+  words.forEach((word, index) => {
+    const { answer, start, direction } = word;
+    let [row, col] = start;
+    wordMap[index] = [];
 
-    const initialCheck = crosswordData.grid.map(row =>
-        row.map(cell => (cell ? '' : null))
-    );
-    setCheckState(initialCheck);
+    for (let i = 0; i < answer.length; i++) {
+      if (!grid[row][col]) {
+        grid[row][col] = { number: 0, letter: '' };
+      }
+      if (i === 0) {
+        grid[row][col].number = index + 1;
+      }
+      grid[row][col].answer = answer[i];
+      wordMap[index].push([row, col]);
 
-    // Create refs for each input cell
-    inputRefs.current = crosswordData.grid.map((row, rIdx) => 
-        row.map((cell, cIdx) => 
-            cell ? React.createRef() : null
-        )
-    );
-
-  }, []);
-
-  const handleInputChange = (e, r, c) => {
-    const newGridState = [...gridState];
-    newGridState[r][c] = e.target.value.toUpperCase().slice(0, 1);
-    setGridState(newGridState);
-
-    // Auto-focus next input
-    if (e.target.value && c < crosswordData.grid[r].length - 1 && gridState[r][c+1] !== null) {
-        inputRefs.current[r][c+1]?.current.focus();
+      if (direction === 'across') col++;
+      else row++;
     }
+  });
+  return { grid, wordMap };
+};
+
+function Game3_Crossword() {
+  const { grid, wordMap } = useMemo(() => buildGrid(crosswordData.gridSize, crosswordData.words), []);
+  const [selectedClue, setSelectedClue] = useState(null);
+  const [revealedWords, setRevealedWords] = useState(new Set());
+
+  const handleClueClick = (index) => {
+    if (revealedWords.has(index)) return;
+    setSelectedClue(index);
   };
 
-  const handleCheckAnswers = () => {
-    const newCheckState = gridState.map((row, rIdx) =>
-      row.map((cellValue, cIdx) => {
-        if (crosswordData.grid[rIdx][cIdx] === null) return null;
-        const isCorrect = cellValue === crosswordData.grid[rIdx][cIdx].answer;
-        return isCorrect ? 'correct' : 'incorrect';
-      })
-    );
-    setCheckState(newCheckState);
+  const handleRevealWord = () => {
+    if (selectedClue === null) return;
+    setRevealedWords(new Set(revealedWords).add(selectedClue));
+    setSelectedClue(null);
   };
 
-  const handleReset = () => {
-    const initialGrid = crosswordData.grid.map(row =>
-        row.map(cell => (cell ? '' : null))
-    );
-    setGridState(initialGrid);
+  const isCellHighlighted = (r, c) => {
+    if (selectedClue === null) return false;
+    return wordMap[selectedClue]?.some(([row, col]) => row === r && col === c);
+  };
 
-    const initialCheck = crosswordData.grid.map(row =>
-        row.map(cell => (cell ? '' : null))
-    );
-    setCheckState(initialCheck);
-  }
+  const getCellLetter = (r, c) => {
+    for (const wordIndex of revealedWords) {
+      const cellInWord = wordMap[wordIndex]?.find(([row, col]) => row === r && col === c);
+      if (cellInWord) {
+        const letterIndex = wordMap[wordIndex].findIndex(([row, col]) => row === r && col === c);
+        return crosswordData.words[wordIndex].answer[letterIndex];
+      }
+    }
+    return '';
+  };
+
+  const acrossClues = crosswordData.words.map((w, i) => ({...w, id: i})).filter(w => w.direction === 'across');
+  const downClues = crosswordData.words.map((w, i) => ({...w, id: i})).filter(w => w.direction === 'down');
 
   return (
     <div className="game-container">
-      <h2>Game 3: Music Crossword</h2>
-      <p className="description">Use the clues to fill in the crossword puzzle.</p>
+      <h2>Game 3: Crossword</h2>
+      <p className="description">Click on a clue, discuss the answer, then reveal the word!</p>
       
-      <div className="crossword-container">
-        <div 
-            className="crossword-grid" 
-            style={{ gridTemplateColumns: `repeat(${crosswordData.grid[0].length}, 40px)` }}
-        >
-          {gridState.map((row, rIdx) =>
-            row.map((cell, cIdx) => {
-              const cellData = crosswordData.grid[rIdx][cIdx];
-              if (cellData === null) {
-                return <div key={`${rIdx}-${cIdx}`} className="grid-cell black-cell"></div>;
-              }
-              return (
-                <div key={`${rIdx}-${cIdx}`} className="grid-cell">
-                  {cellData.number && <span className="cell-number">{cellData.number}</span>}
-                  <input
-                    ref={inputRefs.current[rIdx][cIdx]}
-                    type="text"
-                    maxLength="1"
-                    className={`cell-input ${checkState[rIdx][cIdx]}`}
-                    value={cell}
-                    onChange={(e) => handleInputChange(e, rIdx, cIdx)}
-                  />
-                </div>
-              );
-            })
+      <div className="crossword-layout">
+        <div className="crossword-grid-container">
+          <div className="crossword-grid" style={{ gridTemplateColumns: `repeat(${grid[0].length}, 38px)` }}>
+            {grid.map((row, rIdx) =>
+              row.map((cell, cIdx) => {
+                if (cell === null) {
+                  return <div key={`${rIdx}-${cIdx}`} className="grid-cell black-cell" />;
+                }
+                return (
+                  <div key={`${rIdx}-${cIdx}`} className={`grid-cell ${isCellHighlighted(rIdx, cIdx) ? 'highlighted' : ''}`}>
+                    {cell.number > 0 && <span className="cell-number">{cell.number}</span>}
+                    <span className="cell-letter">{getCellLetter(rIdx, cIdx)}</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          {selectedClue !== null && !revealedWords.has(selectedClue) && (
+            <button onClick={handleRevealWord} className="game-button">
+              Reveal Selected Word
+            </button>
           )}
         </div>
 
-        <div className="crossword-clues">
-          <h3>Across</h3>
-          <ul className="clues-list">
-            {crosswordData.clues.across.map(clue => (
-              <li key={`across-${clue.number}`}><strong>{clue.number}.</strong> {clue.text}</li>
-            ))}
-          </ul>
-          <h3 style={{marginTop: '20px'}}>Down</h3>
-          <ul className="clues-list">
-            {crosswordData.clues.down.map(clue => (
-              <li key={`down-${clue.number}`}><strong>{clue.number}.</strong> {clue.text}</li>
-            ))}
-          </ul>
+        <div className="crossword-clues-panel">
+          <div className="clues-group">
+            <h4>Across</h4>
+            <ul className="clues-list">
+              {acrossClues.map(word => (
+                <li
+                  key={word.id}
+                  className={`clue-item ${selectedClue === word.id ? 'selected' : ''} ${revealedWords.has(word.id) ? 'revealed' : ''}`}
+                  onClick={() => handleClueClick(word.id)}
+                >
+                  <strong>{wordMap[word.id] ? grid[word.start[0]][word.start[1]].number : ''}.</strong> {word.clue}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="clues-group">
+            <h4>Down</h4>
+            <ul className="clues-list">
+              {downClues.map(word => (
+                <li
+                  key={word.id}
+                  className={`clue-item ${selectedClue === word.id ? 'selected' : ''} ${revealedWords.has(word.id) ? 'revealed' : ''}`}
+                  onClick={() => handleClueClick(word.id)}
+                >
+                  <strong>{wordMap[word.id] ? grid[word.start[0]][word.start[1]].number : ''}.</strong> {word.clue}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-
-      <div className="input-area">
-        <button onClick={handleCheckAnswers} className="game-button">Check Answers</button>
-        <button onClick={handleReset} className="game-button" style={{backgroundColor: 'var(--accent-color-2)'}}>Reset</button>
       </div>
     </div>
   );

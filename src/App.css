@@ -15,6 +15,7 @@
   position: relative;
 }
 
+/* Reverted to the version that centers the whole content block */
 .game-content {
   flex-grow: 1;
   width: 100%;

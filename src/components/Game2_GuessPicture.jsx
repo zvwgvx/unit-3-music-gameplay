@@ -1,88 +1,96 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
 
-// --- BẠN SẼ THAY ĐỔI NỘI DUNG Ở ĐÂY ---
-const images = [
-  { src: '/images/image1.jpg', answer: 'Grammy Awards' },
-  { src: '/images/image2.jpg', answer: 'Taylor Swift' },
-  { src: '/images/image3.jpg', answer: 'The Beatles' },
-  // Thêm các hình ảnh khác vào đây
+const pictures = [
+  { src: '/pictures/1.jpg', answer: 'Grammy Awards' },
+  { src: '/pictures/2.png', answer: 'Taylor Swift' },
+  { src: '/pictures/3.jpeg', answer: 'The Beatles' },
+  { src: '/pictures/4.jpg', answer: 'New Answer 1' },
+  { src: '/pictures/5.png', answer: 'New Answer 2' },
+  { src: '/pictures/6.jpg', answer: 'New Answer 3' },
+  { src: '/pictures/7.png', answer: 'New Answer 4' },
+  { src: '/pictures/8.jpeg', answer: 'New Answer 5' },
+  { src: '/pictures/9.jpg', answer: 'New Answer 6' },
+  { src: '/pictures/10.png', answer: 'New Answer 7' },
 ];
-// -----------------------------------------
+
+const GRID_SIZE = 16;
 
 function Game2_GuessPicture() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [userGuess, setUserGuess] = useState('');
-  const [message, setMessage] = useState('');
-  const [isCorrect, setIsCorrect] = useState(null);
+  const [currentPicIndex, setCurrentPicIndex] = useState(0);
+  const [revealedTiles, setRevealedTiles] = useState(new Set());
+  const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
 
   useEffect(() => {
-    setUserGuess('');
-    setMessage('');
-    setIsCorrect(null);
-  }, [currentIndex]);
+    setRevealedTiles(new Set());
+    setIsAnswerRevealed(false);
+  }, [currentPicIndex]);
 
-  const handleCheckAnswer = () => {
-    const correctAnswer = images[currentIndex].answer;
-    if (userGuess.trim().toLowerCase() === correctAnswer.toLowerCase()) {
-      setMessage(`Correct! It's "${correctAnswer}".`);
-      setIsCorrect(true);
-    } else {
-      setMessage('Incorrect. Try again!');
-      setIsCorrect(false);
+  const handleTileClick = (index) => {
+    if (revealedTiles.has(index)) return;
+    const newRevealedTiles = new Set(revealedTiles);
+    newRevealedTiles.add(index);
+    setRevealedTiles(newRevealedTiles);
+  };
+
+  const handleRevealAnswer = () => {
+    setIsAnswerRevealed(true);
+    const allTiles = new Set(Array.from({ length: GRID_SIZE }, (_, i) => i));
+    setRevealedTiles(allTiles);
+  };
+
+  const handleNextPicture = () => {
+    if (currentPicIndex < pictures.length - 1) {
+      setCurrentPicIndex(currentPicIndex + 1);
     }
   };
 
-  const handleNext = () => {
-    if (currentIndex < images.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      setMessage("You've completed all the pictures!");
-      setIsCorrect(null);
-    }
-  };
+  const currentPicture = pictures[currentPicIndex];
 
   return (
     <div className="game-container">
       <h2>Game 2: Guess the Picture</h2>
-      <p className="description">Look at the image and guess the artist, logo, or event!</p>
       
-      <img 
-        src={images[currentIndex].src} 
-        alt="Guess the picture" 
-        style={{ 
-          maxWidth: '80%', 
-          maxHeight: '300px', 
-          borderRadius: '15px', 
-          boxShadow: '0 4px 15px rgba(0,0,0,0.1)' 
-        }} 
-      />
-
-      <div className="input-area">
-        <input
-          type="text"
-          className="game-input"
-          placeholder="Enter your guess..."
-          value={userGuess}
-          onChange={(e) => setUserGuess(e.target.value)}
-          disabled={isCorrect === true}
-        />
-        <button onClick={handleCheckAnswer} className="game-button" disabled={isCorrect === true}>
-          Check
-        </button>
+      <div className="round-indicator">
+        Picture {currentPicIndex + 1} of {pictures.length}
       </div>
 
-      {message && (
-        <div className={`feedback-message ${isCorrect ? 'correct' : 'incorrect'}`}>
-          {message}
+      <p className="description">Click on the tiles to reveal parts of the picture and make your guess!</p>
+      
+      <div className="picture-reveal-container">
+        <div className="picture-grid">
+          <div 
+            className="picture-grid-bg"
+            style={{ backgroundImage: `url(${currentPicture.src})` }}
+          />
+          {Array.from({ length: GRID_SIZE }).map((_, index) => (
+            <div
+              key={index}
+              className={`grid-tile ${revealedTiles.has(index) ? 'revealed' : ''}`}
+              onClick={() => handleTileClick(index)}
+            >
+              {index + 1}
+            </div>
+          ))}
         </div>
-      )}
 
-      {isCorrect && (
-        <button onClick={handleNext} className="game-button" style={{marginTop: '20px'}}>
-          Next Picture
-        </button>
-      )}
+        <div className="song-card-buttons">
+          <button onClick={handleRevealAnswer} className="game-button" disabled={isAnswerRevealed}>
+            Reveal Answer
+          </button>
+          {currentPicIndex < pictures.length - 1 && (
+            <button onClick={handleNextPicture} className="game-button">
+              Next Picture
+            </button>
+          )}
+        </div>
+
+        {isAnswerRevealed && (
+          <div className="revealed-answer">
+            <p>{currentPicture.answer}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -10,9 +10,21 @@
 .game-container h2 {
   font-size: 2rem;
   color: var(--warm-text);
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   border-bottom: 2px solid var(--accent-color-1);
   padding-bottom: 5px;
+}
+
+.round-indicator {
+  padding: 5px 15px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--accent-color-1);
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--warm-text);
+  margin-bottom: 20px;
+  animation: subtle-appear 0.5s ease-out 0.2s backwards;
 }
 
 .game-container p.description {
@@ -22,92 +34,19 @@
   margin-bottom: 25px;
 }
 
-/* --- NEW: Song Card Grid Layout --- */
-.song-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns */
-  gap: 25px;
-  width: 100%;
-  max-width: 700px;
-  margin-top: 20px;
-}
-
-/* --- NEW: Song Card Styling --- */
-.song-card {
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 15px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.song-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
-
-.song-card h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: var(--warm-text);
-}
-
-.song-card-buttons {
-  display: flex;
-  gap: 15px;
-}
-
-.revealed-answer {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #C8E6C9; /* Green for correct */
-  color: #2E7D32;
-  border-radius: 10px;
-  font-weight: bold;
-  animation: subtle-appear 0.4s ease-out forwards;
-}
-
-
-/* --- Keyframe for subtle appearance --- */
 @keyframes subtle-appear {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* --- General Interactive Elements --- */
-.game-button {
-  background-color: var(--accent-color-1);
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  padding: 10px 20px; /* Slightly smaller for cards */
-  font-family: 'Quicksand', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  flex-shrink: 0; 
-}
-.game-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-.game-button:disabled {
-  background-color: var(--accent-color-2);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
+/* --- Game 1 & 2 Styles --- */
+.song-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;width:100%;max-width:700px;margin-top:20px}.song-card{background-color:rgba(255,255,255,.4);border-radius:15px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.2);box-shadow:0 4px 15px rgba(0,0,0,.05);transition:transform .3s ease,box-shadow .3s ease}.song-card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,.1)}.song-card h3{margin-top:0;margin-bottom:20px;color:var(--warm-text)}.song-card-buttons{display:flex;gap:15px}.revealed-answer{margin-top:20px;padding:10px 20px;background-color:#c8e6c9;color:#2e7d32;border-radius:10px;font-weight:700;animation:subtle-appear .4s ease-out forwards}.picture-reveal-container{display:flex;flex-direction:column;align-items:center;gap:20px}.picture-grid{position:relative;width:400px;height:400px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);border:2px solid var(--accent-color-1);border-radius:15px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.1)}.picture-grid-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-size:cover;background-position:center}.grid-tile{background-color:var(--accent-color-2);border:1px solid var(--warm-bg);cursor:pointer;transition:opacity .5s ease;z-index:2;display:flex;justify-content:center;align-items:center;font-size:1.5rem;font-weight:700;color:rgba(255,255,255,.7);user-select:none}.grid-tile.revealed{opacity:0;cursor:default}
+
+/* --- Game 3: Crossword --- */
+.crossword-layout{display:flex;gap:40px;justify-content:center;align-items:flex-start;flex-wrap:wrap;width:100%;max-width:900px}.crossword-grid-container{display:flex;flex-direction:column;align-items:center;gap:20px}.crossword-grid{display:grid;border:3px solid var(--warm-text);flex-shrink:0}.grid-cell{width:38px;height:38px;position:relative;background-color:#fff;border:1px solid var(--warm-text);display:flex;justify-content:center;align-items:center;font-size:1.4rem;font-weight:700;color:var(--warm-text);text-transform:uppercase;transition:background-color .3s ease}.grid-cell.highlighted{background-color:rgba(255,112,67,.2)}.cell-number{position:absolute;top:1px;left:2px;font-size:.6rem;font-weight:700}.black-cell{background-color:var(--accent-color-2);border-color:var(--warm-text);opacity:.6}.cell-letter{animation:subtle-appear .5s ease-out}.crossword-clues-panel{text-align:left;flex-grow:1;min-width:300px}.clues-group{margin-bottom:20px}.clues-group h4{margin:0 0 10px;padding-bottom:5px;border-bottom:2px solid var(--accent-color-2);color:var(--warm-text)}.clues-list{list-style:none;padding:0;margin:0}.clue-item{padding:10px 12px;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:background-color .2s ease}.clue-item:hover{background-color:rgba(0,0,0,.05)}.clue-item.selected{background-color:var(--accent-color-1);color:#fff;font-weight:700}.clue-item.revealed{text-decoration:line-through;opacity:.5;cursor:default;background-color:transparent}
+
+/* --- General Buttons --- */
+.game-button{background-color:var(--accent-color-1);color:#fff;border:none;border-radius:50px;padding:10px 20px;font-family:'Quicksand',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s ease;flex-shrink:0}.game-button:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.1)}.game-button:disabled{background-color:var(--accent-color-2);cursor:not-allowed;opacity:.7}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
