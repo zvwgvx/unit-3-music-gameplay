@@ -1,9 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import './Game.css';
 
-// --- BẠN SẼ THAY ĐỔI NỘI DUNG Ở ĐÂY ---
 const crosswordData = {
-  gridSize: [7, 9], // 7 hàng, 9 cột
+  gridSize: [7, 9],
   words: [
     { clue: 'A performance by a single musician', answer: 'SOLO', start: [2, 0], direction: 'across' },
     { clue: 'A dramatic work set to music', answer: 'OPERA', start: [4, 2], direction: 'across' },
@@ -12,7 +11,6 @@ const crosswordData = {
     { clue: 'The speed at which a passage of music is played', answer: 'TEMPO', start: [2, 5], direction: 'down' },
   ]
 };
-// -----------------------------------------
 
 const buildGrid = (gridSize, words) => {
   const grid = Array(gridSize[0]).fill(null).map(() => Array(gridSize[1]).fill(null));
@@ -45,9 +43,9 @@ function Game3_Crossword() {
   const [selectedClue, setSelectedClue] = useState(null);
   const [revealedWords, setRevealedWords] = useState(new Set());
 
-  const handleClueClick = (index) => {
-    if (revealedWords.has(index)) return;
-    setSelectedClue(index);
+  const handleClueClick = (id) => {
+    if (revealedWords.has(id)) return;
+    setSelectedClue(id);
   };
 
   const handleRevealWord = () => {

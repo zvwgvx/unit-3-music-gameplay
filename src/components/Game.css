@@ -2,8 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-start; /* Fixed position from top for consistent title placement */
   width: 100%;
+  padding-top: 40px; /* Consistent top spacing for all games */
   animation: fadeIn 0.5s ease-in-out;
 }
 
