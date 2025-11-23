@@ -2,13 +2,15 @@ import React, { useState, useMemo } from 'react';
 import './Game.css';
 
 const crosswordData = {
-  gridSize: [7, 9],
+  gridSize: [11, 12],
   words: [
-    { clue: 'A performance by a single musician', answer: 'SOLO', start: [2, 0], direction: 'across' },
-    { clue: 'A dramatic work set to music', answer: 'OPERA', start: [4, 2], direction: 'across' },
-    { clue: 'A devoted admirer of a band', answer: 'FAN', start: [0, 3], direction: 'down' },
-    { clue: 'A musical composition', answer: 'SONG', start: [2, 1], direction: 'down' },
-    { clue: 'The speed at which a passage of music is played', answer: 'TEMPO', start: [2, 5], direction: 'down' },
+    { clue: 'Remove from competition', answer: 'ELIMINATE', start: [1, 2], direction: 'across' },
+    { clue: 'Sequence of shows', answer: 'SERIES', start: [5, 0], direction: 'across' },
+    { clue: 'Person who decides', answer: 'JUDGE', start: [8, 2], direction: 'across' },
+    { clue: 'Having natural skill', answer: 'TALENTED', start: [10, 2], direction: 'across' },
+    { clue: 'To present a show', answer: 'PERFORM', start: [0, 2], direction: 'down' },
+    { clue: 'People watching', answer: 'AUDIENCE', start: [1, 8], direction: 'down' },
+    { clue: 'Song released alone', answer: 'SINGLE', start: [5, 5], direction: 'down' },
   ]
 };
 
@@ -70,24 +72,24 @@ function Game3_Crossword() {
     return '';
   };
 
-  const acrossClues = crosswordData.words.map((w, i) => ({...w, id: i})).filter(w => w.direction === 'across');
-  const downClues = crosswordData.words.map((w, i) => ({...w, id: i})).filter(w => w.direction === 'down');
+  const acrossClues = crosswordData.words.map((w, i) => ({ ...w, id: i })).filter(w => w.direction === 'across');
+  const downClues = crosswordData.words.map((w, i) => ({ ...w, id: i })).filter(w => w.direction === 'down');
 
   return (
     <div className="game-container">
       <h2>Game 3: Crossword</h2>
       <p className="description">Click on a clue, discuss the answer, then reveal the word!</p>
-      
+
       <div className="crossword-layout">
         <div className="crossword-grid-container">
-          <div className="crossword-grid" style={{ gridTemplateColumns: `repeat(${grid[0].length}, 38px)` }}>
+          <div className="crossword-grid" style={{ gridTemplateColumns: `repeat(${grid[0].length}, var(--cell-size))` }}>
             {grid.map((row, rIdx) =>
               row.map((cell, cIdx) => {
                 if (cell === null) {
                   return <div key={`${rIdx}-${cIdx}`} className="grid-cell black-cell" />;
                 }
                 return (
-                  <div key={`${rIdx}-${cIdx}`} className={`grid-cell ${isCellHighlighted(rIdx, cIdx) ? 'highlighted' : ''}`}>
+                  <div key={`${rIdx}-${cIdx}`} className={`grid-cell ${isCellHighlighted(rIdx, cIdx) ? 'highlighted' : ''} ${getCellLetter(rIdx, cIdx) ? 'unboxed' : 'gift-cell'}`}>
                     {cell.number > 0 && <span className="cell-number">{cell.number}</span>}
                     <span className="cell-letter">{getCellLetter(rIdx, cIdx)}</span>
                   </div>
@@ -138,3 +140,5 @@ function Game3_Crossword() {
 }
 
 export default Game3_Crossword;
+
+

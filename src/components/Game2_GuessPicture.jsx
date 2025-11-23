@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Game.css';
 
 const pictures = [
-  { src: '/pictures/1.jpg', answer: 'Grammy Awards' },
+  { src: '/pictures/1.jpeg', answer: 'Thắng Ngọt' },
   { src: '/pictures/2.png', answer: 'Taylor Swift' },
   { src: '/pictures/3.jpeg', answer: 'The Beatles' },
   { src: '/pictures/4.jpg', answer: 'New Answer 1' },
@@ -50,16 +50,16 @@ function Game2_GuessPicture() {
   return (
     <div className="game-container">
       <h2>Game 2: Guess the Picture</h2>
-      
+
       <div className="round-indicator">
         Picture {currentPicIndex + 1} of {pictures.length}
       </div>
 
       <p className="description">Click on the tiles to reveal parts of the picture and make your guess!</p>
-      
+
       <div className="picture-reveal-container">
         <div className="picture-grid">
-          <div 
+          <div
             className="picture-grid-bg"
             style={{ backgroundImage: `url(${currentPicture.src})` }}
           />

@@ -1,54 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import './App.css';
 
 // Import game components
+import Welcome from './components/Welcome.jsx';
 import Game1_GuessSong from './components/Game1_GuessSong.jsx';
 import Game2_GuessPicture from './components/Game2_GuessPicture.jsx';
 import Game3_Crossword from './components/Game3_Crossword.jsx';
 import Game4_GrandQuiz from './components/Game4_GrandQuiz.jsx';
 import EndScreen from './components/EndScreen.jsx';
+import PageTransition from './components/PageTransition.jsx';
+
+import ScaleWrapper from './components/ScaleWrapper.jsx';
 
 // --- Define the game flow ---
 const gameFlow = ['/', '/game1', '/game2', '/game3', '/game4', '/end'];
-
-function Welcome() {
-  const gradientStyle = {
-    backgroundImage: 'linear-gradient(45deg, #D32F2F, #FFA000)',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    color: 'transparent',
-    fontWeight: 'bold',
-  };
-
-  return (
-    <div style={{ textAlign: 'center' }}>
-      <h1 style={{ fontSize: '3.5rem', margin: '0 0 15px 0' }}>
-        <span style={gradientStyle}>Unit 3: Music Challenge</span>
-      </h1>
-      <p style={{ fontSize: '1.3rem', color: 'var(--warm-text)', marginTop: '10px' }}>
-        An interactive review by <span style={gradientStyle}>Group 3</span> (ITK
-        <span style={gradientStyle}>67</span>).
-      </p>
-    </div>
-  );
-}
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Track previous index to determine direction
+  const previousIndex = useRef(0);
+  const currentIndex = gameFlow.indexOf(location.pathname);
+
+  // Calculate direction: 1 for forward (next), -1 for backward (prev)
+  // Default to 0 if indices are same (initial load)
+  const direction = currentIndex > previousIndex.current ? 1 : -1;
+
+  useEffect(() => {
+    // Update previous index AFTER render/transition starts
+    previousIndex.current = currentIndex;
+  }, [currentIndex]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
-      const currentIndex = gameFlow.indexOf(location.pathname);
+      const idx = gameFlow.indexOf(location.pathname);
 
       if (event.key === 'ArrowRight') {
-        if (currentIndex < gameFlow.length - 1) {
-          navigate(gameFlow[currentIndex + 1]);
+        if (idx < gameFlow.length - 1) {
+          navigate(gameFlow[idx + 1]);
         }
       } else if (event.key === 'ArrowLeft') {
-        if (currentIndex > 0) {
-          navigate(gameFlow[currentIndex - 1]);
+        if (idx > 0) {
+          navigate(gameFlow[idx - 1]);
         }
       }
     };
@@ -64,16 +60,44 @@ function App() {
 
   return (
     <div className="app-container">
-      <div className="game-content">
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/game1" element={<Game1_GuessSong />} />
-          <Route path="/game2" element={<Game2_GuessPicture />} />
-          <Route path="/game3" element={<Game3_Crossword />} />
-          <Route path="/game4" element={<Game4_GrandQuiz />} />
-          <Route path="/end" element={<EndScreen />} />
-        </Routes>
-      </div>
+      <ScaleWrapper>
+        <div className="game-content">
+          <AnimatePresence mode="wait" custom={direction}>
+            <Routes location={location}>
+              <Route path="/" element={
+                <PageTransition direction={direction}>
+                  <Welcome />
+                </PageTransition>
+              } />
+              <Route path="/game1" element={
+                <PageTransition direction={direction}>
+                  <Game1_GuessSong />
+                </PageTransition>
+              } />
+              <Route path="/game2" element={
+                <PageTransition direction={direction}>
+                  <Game2_GuessPicture />
+                </PageTransition>
+              } />
+              <Route path="/game3" element={
+                <PageTransition direction={direction}>
+                  <Game3_Crossword />
+                </PageTransition>
+              } />
+              <Route path="/game4" element={
+                <PageTransition direction={direction}>
+                  <Game4_GrandQuiz />
+                </PageTransition>
+              } />
+              <Route path="/end" element={
+                <PageTransition direction={direction}>
+                  <EndScreen />
+                </PageTransition>
+              } />
+            </Routes>
+          </AnimatePresence>
+        </div>
+      </ScaleWrapper>
     </div>
   );
 }

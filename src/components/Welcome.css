@@ -1,0 +1,301 @@
+/* Welcome Screen Container */
+.welcome-container {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    padding: 2rem;
+    /* Warm festive background */
+    background: radial-gradient(circle at center, rgba(255, 251, 240, 0.9) 0%, rgba(255, 248, 225, 0.8) 100%);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(211, 47, 47, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Decorative Background Elements */
+.welcome-bg-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* Floating Music Notes */
+.music-note {
+    position: absolute;
+    color: var(--accent-red);
+    opacity: 0;
+    animation: floatUp 8s linear infinite;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 4px rgba(211, 47, 47, 0.2));
+}
+
+.music-note:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    font-size: 2rem;
+}
+
+.music-note:nth-child(2) {
+    left: 20%;
+    animation-delay: 2s;
+    color: var(--accent-gold);
+}
+
+.music-note:nth-child(3) {
+    left: 35%;
+    animation-delay: 4s;
+}
+
+.music-note:nth-child(4) {
+    left: 50%;
+    animation-delay: 1s;
+    font-size: 2.5rem;
+    color: var(--accent-green);
+}
+
+.music-note:nth-child(5) {
+    left: 65%;
+    animation-delay: 3s;
+}
+
+.music-note:nth-child(6) {
+    left: 80%;
+    animation-delay: 5s;
+    color: var(--accent-gold);
+}
+
+.music-note:nth-child(7) {
+    left: 90%;
+    animation-delay: 2.5s;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Snowflakes */
+.snowflake {
+    position: absolute;
+    color: #fff;
+    font-size: 1em;
+    font-family: Arial;
+    text-shadow: 0 0 1px #000;
+}
+
+.snowflake {
+    position: absolute;
+    top: -10%;
+    color: rgba(211, 47, 47, 0.15);
+    /* Subtle red snow */
+    animation: fall linear infinite;
+}
+
+.snowflake:nth-child(2n) {
+    color: rgba(249, 168, 37, 0.2);
+    /* Subtle gold snow */
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+    }
+}
+
+/* Main Content Area */
+.welcome-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Vinyl Record Animation */
+.vinyl-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: #1a1a1a;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.2),
+        0 0 0 8px rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spin 10s linear infinite;
+}
+
+.vinyl-label {
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-red) 0%, #b71c1c 100%);
+    border: 2px solid var(--accent-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+}
+
+.vinyl-grooves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: repeating-radial-gradient(#1a1a1a,
+            #1a1a1a 2px,
+            #2a2a2a 3px,
+            #2a2a2a 4px);
+    z-index: -1;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Typography */
+.welcome-badge {
+    display: inline-block;
+    padding: 8px 24px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    color: var(--accent-red);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    margin-bottom: 1rem;
+}
+
+.welcome-title {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    margin: 0;
+    background: linear-gradient(135deg, var(--accent-red) 0%, #C62828 50%, var(--accent-gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.welcome-subtitle {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 500;
+    max-width: 600px;
+}
+
+.highlight-group {
+    color: var(--accent-red);
+    font-weight: 800;
+    text-decoration: underline;
+    text-decoration-color: var(--accent-gold);
+    text-underline-offset: 4px;
+}
+
+/* Start Button */
+.start-button-container {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.start-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-red), #C62828);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(211, 47, 47, 0.4);
+    animation: pulse-beat 2s infinite;
+}
+
+.start-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 35px rgba(211, 47, 47, 0.5);
+}
+
+.start-btn:active {
+    transform: scale(0.95);
+}
+
+.press-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+@keyframes pulse-beat {
+    0% {
+        box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 20px rgba(211, 47, 47, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(211, 47, 47, 0);
+    }
+}

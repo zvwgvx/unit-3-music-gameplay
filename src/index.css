@@ -1,76 +1,125 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Playfair+Display:wght@600;800&display=swap');
 
 :root {
-  --warm-bg: #FFF8E1;
-  --warm-text: #5D4037;
-  --accent-color-1: #FF7043;
-  --accent-color-2: #EF9A9A; /* NEW: Soft Coral Pink */
-  --card-bg: rgba(255, 255, 255, 0.7);
+  /* Cozy Christmas Palette */
+  --bg-base: #FFFBF0;
+  /* Warm Cream */
+  --text-primary: #4A403A;
+  /* Warm Chocolate */
+  --text-secondary: #8D7F76;
+  /* Taupe */
+
+  /* Festive Accents */
+  --accent-red: #D32F2F;
+  /* Holiday Red */
+  --accent-green: #2E7D32;
+  /* Pine Green */
+  --accent-gold: #F9A825;
+  /* Warm Gold */
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+  --gradient-gold: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
+  --gradient-festive: linear-gradient(135deg, #D32F2F 0%, #F9A825 50%, #2E7D32 100%);
+
+  /* Warm Glassmorphism */
+  --glass-bg: rgba(255, 251, 240, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --glass-shadow:
+    0 4px 6px -1px rgba(74, 64, 58, 0.05),
+    0 10px 15px -3px rgba(74, 64, 58, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+
+  --font-main: 'Outfit', sans-serif;
+  --font-display: 'Playfair Display', serif;
 }
 
 body {
   margin: 0;
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  background-color: var(--warm-bg);
-  color: var(--warm-text);
-  
-  position: relative;
-  overflow: hidden;
 
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  /* Disable scrolling globally */
+
+  /* Sheet Music Background Pattern */
+  background-image:
+    /* Staves: 5 lines per group */
+    repeating-linear-gradient(180deg,
+      rgba(74, 64, 58, 0.05) 0px,
+      rgba(74, 64, 58, 0.05) 1px,
+      transparent 1px,
+      transparent 10px),
+    /* Subtle festive glow */
+    radial-gradient(circle at 20% 30%, rgba(211, 47, 47, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(46, 125, 50, 0.03) 0%, transparent 40%);
+  background-size: 100% 60px, 100% 100%, 100% 100%;
+  /* 60px for one staff group */
 }
 
-/* A single pseudo-element to act as the rotating spinner */
+/* Floating Golden Dust */
 body::before {
   content: '';
   position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 80vw;
+  height: 80vw;
+  background: radial-gradient(circle, rgba(249, 168, 37, 0.08), transparent 70%);
+  filter: blur(40px);
   z-index: -1;
-  top: 50%;
-  left: 50%;
-  
-  width: 150vmax;
-  height: 150vmax;
-  
-  background-image: 
-    radial-gradient(circle, var(--accent-color-1), transparent),
-    radial-gradient(circle, var(--accent-color-2), transparent);
-  
-  background-position: 
-    calc(50% - 40vmax) 50%,
-    calc(50% + 40vmax) 50%;
+  animation: float 25s ease-in-out infinite;
+}
 
-  background-size: 
-    75vmax 75vmax,
-    55vmax 55vmax;
-  
-  background-repeat: no-repeat;
+body::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  right: -20%;
+  width: 80vw;
+  height: 80vw;
+  background: radial-gradient(circle, rgba(211, 47, 47, 0.05), transparent 70%);
+  filter: blur(40px);
+  z-index: -1;
+  animation: float 30s ease-in-out infinite reverse;
+}
 
-  opacity: 0.6;
-  filter: blur(60px);
+@keyframes float {
 
-  animation: rotate 40s linear infinite;
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(40px, 40px);
+  }
 }
 
 #root {
   width: 100%;
   height: 100%;
+  overflow: hidden;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 }
 
-@keyframes rotate {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+/* Hide Scrollbar Globally */
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  background: transparent;
+}
+
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

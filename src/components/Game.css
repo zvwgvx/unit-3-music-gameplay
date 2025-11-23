@@ -1,55 +1,574 @@
+/* --- Warm Glass Container --- */
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Fixed position from top for consistent title placement */
+  justify-content: flex-start;
   width: 100%;
-  padding-top: 40px; /* Consistent top spacing for all games */
-  animation: fadeIn 0.5s ease-in-out;
+  max-width: 1000px;
+  padding: 50px;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  box-shadow: var(--glass-shadow);
+
+  animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  /* overflow: hidden; Removed to allow content expansion */
+}
+
+
+
+/* Musical Watermark */
+.game-container::after {
+  content: '𝄞';
+  position: absolute;
+  bottom: -20px;
+  right: 10px;
+  font-family: var(--font-display);
+  font-size: 15rem;
+  color: var(--accent-gold);
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-15deg);
 }
 
 .game-container h2 {
-  font-size: 2rem;
-  color: var(--warm-text);
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
   margin-bottom: 10px;
-  border-bottom: 2px solid var(--accent-color-1);
-  padding-bottom: 5px;
+  color: var(--accent-red);
+  text-align: center;
+  letter-spacing: -0.5px;
+  /* Add musical note to header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.game-container h2::before,
+.game-container h2::after {
+  content: '♪';
+  font-size: 2rem;
+  color: var(--accent-gold);
+  opacity: 0.8;
 }
 
 .round-indicator {
-  padding: 5px 15px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border: 1px solid var(--accent-color-1);
+  padding: 6px 16px;
+  background: #fff;
   border-radius: 50px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: var(--warm-text);
-  margin-bottom: 20px;
-  animation: subtle-appear 0.5s ease-out 0.2s backwards;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-green);
+  box-shadow: 0 2px 0 rgba(46, 125, 50, 0.2);
+  /* Flat shadow */
+  margin-bottom: 24px;
+  border: 2px solid rgba(46, 125, 50, 0.1);
 }
 
 .game-container p.description {
-  font-size: 1.1rem;
-  max-width: 600px;
+  font-size: 1.2rem;
+  max-width: 650px;
   line-height: 1.6;
-  margin-bottom: 25px;
+  margin-bottom: 40px;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
-@keyframes subtle-appear {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+/* --- Buttons (Classic & Solid) --- */
+.game-button {
+  background: var(--accent-red);
+  /* Solid Red */
+  color: #FFFFFF !important;
+  border: none;
+  border-radius: 12px;
+  /* Slightly less round for classic feel */
+  padding: 12px 28px;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  /* Flat, solid shadow for tactile feel */
+  box-shadow: 0 4px 0 #B71C1C;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
 }
 
-/* --- Game 1 & 2 Styles --- */
-.song-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;width:100%;max-width:700px;margin-top:20px}.song-card{background-color:rgba(255,255,255,.4);border-radius:15px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.2);box-shadow:0 4px 15px rgba(0,0,0,.05);transition:transform .3s ease,box-shadow .3s ease}.song-card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,.1)}.song-card h3{margin-top:0;margin-bottom:20px;color:var(--warm-text)}.song-card-buttons{display:flex;gap:15px}.revealed-answer{margin-top:20px;padding:10px 20px;background-color:#c8e6c9;color:#2e7d32;border-radius:10px;font-weight:700;animation:subtle-appear .4s ease-out forwards}.picture-reveal-container{display:flex;flex-direction:column;align-items:center;gap:20px}.picture-grid{position:relative;width:400px;height:400px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);border:2px solid var(--accent-color-1);border-radius:15px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.1)}.picture-grid-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-size:cover;background-position:center}.grid-tile{background-color:var(--accent-color-2);border:1px solid var(--warm-bg);cursor:pointer;transition:opacity .5s ease;z-index:2;display:flex;justify-content:center;align-items:center;font-size:1.5rem;font-weight:700;color:rgba(255,255,255,.7);user-select:none}.grid-tile.revealed{opacity:0;cursor:default}
+.game-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #B71C1C;
+  background: #D32F2F;
+  /* Keep same color, just move */
+}
+
+.game-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #B71C1C;
+}
+
+.game-button:disabled {
+  background: #D7CCC8;
+  box-shadow: none;
+  color: #FFFFFF !important;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Missing Class for Game 2 Buttons */
+.song-card-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+  width: 100%;
+}
+
+/* --- Game 1: Song Grid --- */
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.song-card {
+  background: #fff;
+  border: 1px solid #EFEBE9;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 6px rgba(74, 64, 58, 0.05);
+}
+
+.song-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(249, 168, 37, 0.15);
+}
+
+.song-card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.revealed-answer {
+  margin-top: 16px;
+  padding: 8px 20px;
+  background: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #C8E6C9;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- Game 2: Picture Grid --- */
+.picture-reveal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.picture-grid {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  border: 4px solid #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(74, 64, 58, 0.1);
+}
+
+.picture-grid-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.grid-tile {
+  background-color: #EFEBE9;
+  border: 1px solid #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #A1887F;
+}
+
+.grid-tile:hover {
+  background-color: #D7CCC8;
+  color: var(--text-primary);
+}
+
+.grid-tile.revealed {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+}
 
 /* --- Game 3: Crossword --- */
-.crossword-layout{display:flex;gap:40px;justify-content:center;align-items:flex-start;flex-wrap:wrap;width:100%;max-width:900px}.crossword-grid-container{display:flex;flex-direction:column;align-items:center;gap:20px}.crossword-grid{display:grid;border:3px solid var(--warm-text);flex-shrink:0}.grid-cell{width:38px;height:38px;position:relative;background-color:#fff;border:1px solid var(--warm-text);display:flex;justify-content:center;align-items:center;font-size:1.4rem;font-weight:700;color:var(--warm-text);text-transform:uppercase;transition:background-color .3s ease}.grid-cell.highlighted{background-color:rgba(255,112,67,.2)}.cell-number{position:absolute;top:1px;left:2px;font-size:.6rem;font-weight:700}.black-cell{background-color:var(--accent-color-2);border-color:var(--warm-text);opacity:.6}.cell-letter{animation:subtle-appear .5s ease-out}.crossword-clues-panel{text-align:left;flex-grow:1;min-width:300px}.clues-group{margin-bottom:20px}.clues-group h4{margin:0 0 10px;padding-bottom:5px;border-bottom:2px solid var(--accent-color-2);color:var(--warm-text)}.clues-list{list-style:none;padding:0;margin:0}.clue-item{padding:10px 12px;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:background-color .2s ease}.clue-item:hover{background-color:rgba(0,0,0,.05)}.clue-item.selected{background-color:var(--accent-color-1);color:#fff;font-weight:700}.clue-item.revealed{text-decoration:line-through;opacity:.5;cursor:default;background-color:transparent}
+.crossword-layout {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+}
 
-/* --- General Buttons --- */
-.game-button{background-color:var(--accent-color-1);color:#fff;border:none;border-radius:50px;padding:10px 20px;font-family:'Quicksand',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s ease;flex-shrink:0}.game-button:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.1)}.game-button:disabled{background-color:var(--accent-color-2);cursor:not-allowed;opacity:.7}
+.crossword-grid {
+  display: grid;
+  border: 4px solid #fff;
+  background: rgba(255, 255, 255, 0.5);
+  /* Semi-transparent background */
+  padding: 4px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(74, 64, 58, 0.08);
+}
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* --- Game 3: Crossword --- */
+:root {
+  --cell-size: 40px;
+}
+
+@media (max-width: 1366px) {
+  :root {
+    --cell-size: clamp(28px, 4.5vmin, 36px);
+  }
+}
+
+.crossword-layout {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.crossword-grid {
+  display: grid;
+  gap: 6px;
+  /* Space between soft cells */
+  background: transparent;
+  border: none;
+  /* Remove outer border for cleaner look */
+  box-shadow: none;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.grid-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  position: relative;
+  background-color: #fff;
+  border: none;
+  /* Borders handled by grid gap */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-display);
+  /* Premium font for letters */
+  font-size: calc(var(--cell-size) * 0.6);
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 8px;
+  /* Softer look */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Premium Gift Box Style */
+.grid-cell.gift-cell {
+  background-color: #fff;
+  /* Clean background for the icon */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  overflow: hidden;
+  /* Simple Flat Top-Down Gift Box */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' preserveAspectRatio='none'%3E%3Crect width='24' height='24' fill='%23D32F2F'/%3E%3Crect x='10' width='4' height='24' fill='%232E7D32'/%3E%3Crect y='10' width='24' height='4' fill='%232E7D32'/%3E%3Crect x='9' y='9' width='6' height='6' rx='1' fill='%23FFD700'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.grid-cell.gift-cell:hover {
+  transform: scale(1.1);
+}
+
+/* Remove old CSS ribbons */
+.grid-cell.gift-cell::before,
+.grid-cell.gift-cell::after {
+  display: none;
+}
+
+/* Hide letter in gift state, but keep number visible */
+.grid-cell.gift-cell .cell-letter {
+  opacity: 0;
+}
+
+/* Style number to be visible on top of gift */
+.grid-cell.gift-cell .cell-number {
+  opacity: 1;
+  color: #D32F2F;
+  background: #fff;
+  z-index: 2;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  top: 3px;
+  left: 3px;
+  border: 1px solid #FFD700;
+}
+
+/* Unboxed Animation */
+.grid-cell.unboxed {
+  animation: unboxPremium 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  background-color: #fff;
+  background-image: none;
+  box-shadow: inset 0 0 0 1px #E0E0E0;
+}
+
+.grid-cell.highlighted {
+  background-color: #FFF9C4;
+  /* Soft Yellow */
+  z-index: 0;
+  /* Keep flat */
+  box-shadow: none;
+}
+
+@keyframes unboxPremium {
+  0% {
+    transform: scale(0.9) rotate(-5deg);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.1) rotate(3deg);
+    opacity: 1;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+.cell-number {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 0.55rem;
+  color: #5D4037;
+  font-weight: 700;
+  font-family: var(--font-main);
+}
+
+.black-cell {
+  background-color: #BCAAA4;
+  /* Revert to lighter taupe */
+  border: none;
+  opacity: 1;
+}
+
+/* Clues Panel - Notepad Style */
+.crossword-clues-panel {
+  background: #fff;
+  padding: 32px;
+  /* More padding for a spacious look */
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  flex: 1;
+  /* Allow it to grow */
+  min-width: 300px;
+  max-width: 480px;
+  /* Slightly reduced from 600px */
+  border-top: 8px solid var(--accent-red);
+  height: fit-content;
+  /* Ensure it doesn't stretch unnecessarily high */
+}
+
+@media (max-width: 1024px) {
+  .crossword-clues-panel {
+    padding: 20px;
+    max-width: 100%;
+    min-width: 250px;
+  }
+}
+
+.clues-group h4 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent-red);
+  margin-bottom: 16px;
+  display: inline-block;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.clue-item {
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #5D4037;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.clue-item:hover {
+  background: #F5F5F5;
+  transform: translateX(2px);
+}
+
+.clue-item.selected {
+  background: #FFF9C4;
+  color: #333;
+  font-weight: 600;
+  border-color: var(--accent-gold);
+}
+
+.clue-item.revealed {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* --- Game 4: Quiz --- */
+.quiz-question {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: #333;
+  /* Dark Gray */
+  line-height: 1.3;
+}
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2x2 Grid Layout */
+  gap: 20px;
+  width: 100%;
+}
+
+.quiz-option-button {
+  background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+  border: 2px solid #E0E0E0;
+  color: #333 !important;
+  /* Dark Gray */
+  padding: 20px 24px;
+  border-radius: 16px;
+  font-family: var(--font-main);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 0 #E0E0E0, 0 10px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  top: 0;
+}
+
+.quiz-option-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #E0E0E0, 0 15px 20px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-gold);
+  color: #333 !important;
+  z-index: 1;
+}
+
+.quiz-option-button:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #E0E0E0, 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-option-button.correct {
+  background: #E8F5E9;
+  border-color: var(--accent-green);
+  color: #2E7D32 !important;
+}
+
+.quiz-option-button.incorrect {
+  background: #FFEBEE;
+  border-color: var(--accent-red);
+  color: #D32F2F !important;
+}
+
+/* --- Animations --- */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  70% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
