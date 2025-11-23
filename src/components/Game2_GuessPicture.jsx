@@ -49,7 +49,7 @@ function Game2_GuessPicture() {
 
   return (
     <div className="game-container">
-      <h2>Game 2: Guess the Picture</h2>
+      <h2>Hidden Masterpiece</h2>
 
       <div className="round-indicator">
         Picture {currentPicIndex + 1} of {pictures.length}
@@ -66,7 +66,7 @@ function Game2_GuessPicture() {
           {Array.from({ length: GRID_SIZE }).map((_, index) => (
             <div
               key={index}
-              className={`grid-tile ${revealedTiles.has(index) ? 'revealed' : ''}`}
+              className={`grid-tile variant-${(index % 4) + 1} ${revealedTiles.has(index) ? 'revealed' : ''}`}
               onClick={() => handleTileClick(index)}
             >
               {index + 1}
@@ -74,22 +74,24 @@ function Game2_GuessPicture() {
           ))}
         </div>
 
-        <div className="song-card-buttons">
-          <button onClick={handleRevealAnswer} className="game-button" disabled={isAnswerRevealed}>
-            Reveal Answer
-          </button>
-          {currentPicIndex < pictures.length - 1 && (
-            <button onClick={handleNextPicture} className="game-button">
-              Next Picture
+        <div className="picture-controls">
+          <div className="song-card-buttons">
+            <button onClick={handleRevealAnswer} className="game-button" disabled={isAnswerRevealed}>
+              Reveal
             </button>
+            {currentPicIndex < pictures.length - 1 && (
+              <button onClick={handleNextPicture} className="game-button">
+                Next
+              </button>
+            )}
+          </div>
+
+          {isAnswerRevealed && (
+            <div className="revealed-answer">
+              <p>{currentPicture.answer}</p>
+            </div>
           )}
         </div>
-
-        {isAnswerRevealed && (
-          <div className="revealed-answer">
-            <p>{currentPicture.answer}</p>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ const songs = [
 function Game1_GuessSong() {
   return (
     <div className="game-container">
-      <h2>Game 1: Guess the Song</h2>
+      <h2>Melody Mystery</h2>
       <p className="description">
         Listen to the songs and try to guess. Click 'Reveal' when you are ready!
       </p>

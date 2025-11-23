@@ -89,7 +89,7 @@ function Game4_GrandQuiz() {
   if (isQuizFinished) {
     return (
       <div className="game-container">
-        <h2>Grand Quiz Complete!</h2>
+        <h2>Grand Finale Complete!</h2>
         <div className="revealed-answer" style={{ marginTop: '40px' }}>
           <p style={{ fontSize: '1.5rem' }}>Thank you for playing!</p>
           <p>You answered {score} out of {quizData.length} correctly.</p>
@@ -100,13 +100,13 @@ function Game4_GrandQuiz() {
 
   return (
     <div className="game-container">
-      <h2>Game 4: Grand Quiz</h2>
+      <h2>The Grand Finale</h2>
       <div className="round-indicator">
         Question {currentQuestionIndex + 1} of {quizData.length}
       </div>
       <p className="description">Select the correct answer.</p>
 
-      <div style={{ width: '100%', maxWidth: '800px' }}>
+      <div style={{ width: '100%', maxWidth: '1200px' }}>
         <p className="quiz-question">{currentQuestion.question}</p>
         <div className="quiz-options">
           {currentQuestion.options.map((option, index) => {

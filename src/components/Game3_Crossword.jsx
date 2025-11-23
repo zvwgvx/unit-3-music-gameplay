@@ -77,7 +77,7 @@ function Game3_Crossword() {
 
   return (
     <div className="game-container">
-      <h2>Game 3: Crossword</h2>
+      <h2>Symphony of Words</h2>
       <p className="description">Click on a clue, discuss the answer, then reveal the word!</p>
 
       <div className="crossword-layout">
